@@ -10,12 +10,13 @@ services:
       - key: PORT
         value: "5001"
 
-  # Node.js API gateway
+  # Node.js API gateway (native Node — lighter and faster)
   - type: web
     name: songdiff-backend
-    runtime: docker
-    dockerfilePath: ./backend/Dockerfile
-    dockerContext: ./backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: node dist/index.js
     plan: free
     envVars:
       - key: PORT
