@@ -34,14 +34,27 @@ _YT_URL_RE = re.compile(
 # ---------------------------------------------------------------------------
 
 def _find_ytdlp() -> str:
-    """Resolve path to yt-dlp standalone binary."""
-    standalone = os.path.expanduser("~/.local/bin/yt-dlp")
-    if os.path.isfile(standalone):
-        return standalone
-    venv_bin = os.path.join(os.path.dirname(sys.executable), "yt-dlp")
-    if os.path.isfile(venv_bin):
-        return venv_bin
-    return "yt-dlp"
+    """Resolve path to yt-dlp, checking common locations."""
+    for path in [
+        os.path.expanduser("~/.local/bin/yt-dlp"),       # local standalone
+        os.path.join(os.path.dirname(sys.executable), "yt-dlp"),  # venv
+        "/usr/local/bin/yt-dlp",                          # Docker pip install
+    ]:
+        if os.path.isfile(path):
+            return path
+    return "yt-dlp"  # fallback to PATH
+
+
+def _find_ffmpeg_dir() -> str:
+    """Find the directory containing ffmpeg."""
+    for path in [
+        os.path.expanduser("~/.local/bin/ffmpeg"),
+        "/usr/bin/ffmpeg",
+        "/usr/local/bin/ffmpeg",
+    ]:
+        if os.path.isfile(path):
+            return os.path.dirname(path)
+    return "/usr/bin"  # sensible default
 
 
 def download_youtube_audio(url: str) -> str:
@@ -61,7 +74,7 @@ def download_youtube_audio(url: str) -> str:
                 "-x",
                 "--audio-format", "mp3",
                 "--audio-quality", "192K",
-                "--ffmpeg-location", os.path.expanduser("~/.local/bin"),
+                "--ffmpeg-location", _find_ffmpeg_dir(),
                 "-o", out_template,
                 url,
             ],
@@ -95,7 +108,7 @@ def search_and_download_youtube(song_name: str, artist: str) -> str:
                 "-x",
                 "--audio-format", "mp3",
                 "--audio-quality", "192K",
-                "--ffmpeg-location", os.path.expanduser("~/.local/bin"),
+                "--ffmpeg-location", _find_ffmpeg_dir(),
                 "-o", out_template,
                 f"ytsearch1:{query}",
             ],

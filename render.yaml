@@ -21,9 +21,6 @@ services:
       - key: PORT
         value: "3001"
       - key: AUDIO_SERVICE_URL
-        fromService:
-          name: songdiff-audio
-          type: web
-          property: hostport
+        value: "https://songdiff-audio.onrender.com"
       - key: FRONTEND_URL
         value: "*"

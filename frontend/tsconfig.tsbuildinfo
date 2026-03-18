@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/breakdownbar.tsx","./src/components/filedropzone.tsx","./src/components/footer.tsx","./src/components/loader.tsx","./src/components/resultspanel.tsx","./src/components/scorering.tsx","./src/components/songinput.tsx","./src/hooks/usecompare.ts","./src/types/index.ts"],"version":"5.9.3"}
