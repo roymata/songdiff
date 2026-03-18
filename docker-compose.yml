@@ -1,0 +1,25 @@
+services:
+  audio-service:
+    build: ./audio-service
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - AUDIO_SERVICE_URL=http://audio-service:5001
+      - FRONTEND_URL=http://localhost:5173
+    depends_on:
+      - audio-service
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend

@@ -1,0 +1,29 @@
+services:
+  # Python audio analysis microservice (Docker)
+  - type: web
+    name: songdiff-audio
+    runtime: docker
+    dockerfilePath: ./audio-service/Dockerfile
+    dockerContext: ./audio-service
+    plan: free
+    envVars:
+      - key: PORT
+        value: "5001"
+
+  # Node.js API gateway
+  - type: web
+    name: songdiff-backend
+    runtime: node
+    buildCommand: cd backend && npm install && npm run build
+    startCommand: cd backend && node dist/index.js
+    plan: free
+    envVars:
+      - key: PORT
+        value: "3001"
+      - key: AUDIO_SERVICE_URL
+        fromService:
+          name: songdiff-audio
+          type: web
+          property: hostport
+      - key: FRONTEND_URL
+        value: "*"
