@@ -177,7 +177,7 @@ compareRouter.post(
 
       const response = await fetch(`${AUDIO_SERVICE_URL}/compare`, {
         method: "POST",
-        // @ts-expect-error form-data works with fetch body
+        // @ts-ignore form-data works with fetch body
         body: form,
         headers: form.getHeaders(),
       });
