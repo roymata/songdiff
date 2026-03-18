@@ -13,9 +13,9 @@ services:
   # Node.js API gateway
   - type: web
     name: songdiff-backend
-    runtime: node
-    buildCommand: cd backend && npm install && npm run build
-    startCommand: cd backend && node dist/index.js
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
     plan: free
     envVars:
       - key: PORT
